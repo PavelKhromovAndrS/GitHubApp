@@ -1,4 +1,4 @@
-package ru.pavelkhromov.githubapp
+package ru.pavelkhromov.githubapp.domain
 
 data class UserEntity(
     val login: String,

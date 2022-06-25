@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/linear_layout_padding"
-    tools:context=".MainActivity">
+    tools:context=".ui.users.MainActivity">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/refresh_button"

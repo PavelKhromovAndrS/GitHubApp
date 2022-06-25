@@ -1,8 +1,9 @@
-package ru.pavelkhromov.githubapp
+package ru.pavelkhromov.githubapp.ui.users
 
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ru.pavelkhromov.githubapp.domain.UserEntity
 
 class UsersAdapter : RecyclerView.Adapter<UserViewHolder>() {
     private val data = mutableListOf<UserEntity>()
