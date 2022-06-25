@@ -3,6 +3,7 @@ package ru.pavelkhromov.githubapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
 
@@ -15,10 +16,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        showProgress(false)
+
         binding.refreshButton.setOnClickListener {
+            showProgress(true)
             usersRepo.getUsers(
-                onSuccess = adapter::setData,
-                onError = { Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show() }
+                onSuccess = {
+                    showProgress(false)
+                    adapter.setData(it)
+                },
+                onError = {
+                    showProgress(false)
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                }
             )
         }
         initRecyclerView()
@@ -29,4 +40,10 @@ class MainActivity : AppCompatActivity() {
         binding.usersRecyclerView.adapter = adapter
 
     }
+
+    private fun showProgress(inProgress: Boolean) {
+        binding.progressBar.isVisible = inProgress
+        binding.usersRecyclerView.isVisible = !inProgress
+    }
+
 }
