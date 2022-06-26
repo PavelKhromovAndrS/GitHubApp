@@ -1,5 +1,6 @@
 package ru.pavelkhromov.githubapp.ui.users
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -9,11 +10,12 @@ import ru.pavelkhromov.githubapp.app
 import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
+import ru.pavelkhromov.githubapp.ui.usersdetails.UsersDetailsActivity
 
-class MainActivity : AppCompatActivity(), UsersContract.View {
+class MainActivity : AppCompatActivity(), UsersContract.View,OnItemClickListener {
 
     private lateinit var binding: ActivityMainBinding
-    private val adapter: UsersAdapter = UsersAdapter()
+    private val adapter: UsersAdapter = UsersAdapter(this)
     private lateinit var presenter: UsersContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,5 +72,13 @@ class MainActivity : AppCompatActivity(), UsersContract.View {
         binding.usersRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.usersRecyclerView.adapter = adapter
 
+    }
+
+    override fun onItemClick(user: UserEntity) {
+
+        val intent = Intent(this@MainActivity, UsersDetailsActivity::class.java)
+        intent.putExtra("key",user)
+        startActivity(intent)
+        showProgress(false)
     }
 }
