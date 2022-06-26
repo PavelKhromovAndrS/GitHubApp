@@ -1,19 +1,11 @@
 package ru.pavelkhromov.githubapp.ui.usersdetails
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.core.view.isVisible
 import coil.load
-import ru.pavelkhromov.githubapp.R
-import ru.pavelkhromov.githubapp.app
-import ru.pavelkhromov.githubapp.data.FakeUsersRepoImpl
-import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
 import ru.pavelkhromov.githubapp.databinding.ActivityUsersDetailsBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
-import ru.pavelkhromov.githubapp.ui.users.UsersContract
-import ru.pavelkhromov.githubapp.ui.users.UsersPresenter
 
 class UsersDetailsActivity : AppCompatActivity(), UsersDetailsContract.View {
 
