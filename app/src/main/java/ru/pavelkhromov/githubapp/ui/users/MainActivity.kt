@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity(), UsersContract.View {
 
     private lateinit var binding: ActivityMainBinding
     private val adapter: UsersAdapter = UsersAdapter()
-    private lateinit var presenter: UsersPresenter
+    private lateinit var presenter: UsersContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -22,8 +22,8 @@ class MainActivity : AppCompatActivity(), UsersContract.View {
         setContentView(binding.root)
 
         initViews()
+        presenter = extractPresenter()
 
-        presenter = UsersPresenter(app.usersRepo)
         presenter.attach(this)
 
     }
@@ -31,6 +31,15 @@ class MainActivity : AppCompatActivity(), UsersContract.View {
     override fun onDestroy() {
         presenter.detach()
         super.onDestroy()
+    }
+
+    override fun onRetainCustomNonConfigurationInstance(): UsersContract.Presenter {
+        return presenter
+    }
+
+    private fun extractPresenter(): UsersContract.Presenter {
+        return lastCustomNonConfigurationInstance as? UsersContract.Presenter
+            ?: UsersPresenter(app.usersRepo)
     }
 
     private fun initViews() {
