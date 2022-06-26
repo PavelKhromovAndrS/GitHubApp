@@ -10,10 +10,12 @@ import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), UsersContract.View {
+
     private lateinit var binding: ActivityMainBinding
     private val adapter: UsersAdapter = UsersAdapter()
-    private val usersRepo: UsersRepo by lazy { app.usersRepo }
+    private lateinit var presenter: UsersPresenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -21,38 +23,38 @@ class MainActivity : AppCompatActivity() {
 
         initViews()
 
+        presenter = UsersPresenter(app.usersRepo)
+        presenter.attach(this)
+
+    }
+
+    override fun onDestroy() {
+        presenter.detach()
+        super.onDestroy()
     }
 
     private fun initViews() {
         showProgress(false)
 
         binding.refreshButton.setOnClickListener {
-            loadData()
+            presenter.onRefresh()
         }
 
         initRecyclerView()
     }
 
-    private fun loadData() {
-        showProgress(true)
-        usersRepo.getUsers(
-            onSuccess = {
-                showProgress(false)
-                onDataLoaded(it)
-            },
-            onError = {
-                showProgress(false)
-                onError(it)
-            }
-        )
-    }
 
-    private fun onDataLoaded(data: List<UserEntity>) {
+    override fun showUsers(data: List<UserEntity>) {
         adapter.setData(data)
     }
 
-    private fun onError(throwable: Throwable) {
+    override fun showError(throwable: Throwable) {
         Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showProgress(inProgress: Boolean) {
+        binding.progressBar.isVisible = inProgress
+        binding.usersRecyclerView.isVisible = !inProgress
     }
 
     private fun initRecyclerView() {
@@ -60,10 +62,4 @@ class MainActivity : AppCompatActivity() {
         binding.usersRecyclerView.adapter = adapter
 
     }
-
-    private fun showProgress(inProgress: Boolean) {
-        binding.progressBar.isVisible = inProgress
-        binding.usersRecyclerView.isVisible = !inProgress
-    }
-
 }
