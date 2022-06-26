@@ -1,6 +1,6 @@
-package ru.pavelkhromov.githubapp.domain
+package ru.pavelkhromov.githubapp.domain.repos
 
-import ru.pavelkhromov.githubapp.domain.UserEntity
+import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 
 interface UsersRepo {
 

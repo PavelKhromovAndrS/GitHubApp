@@ -2,8 +2,8 @@ package ru.pavelkhromov.githubapp.data
 
 import android.os.Handler
 import android.os.Looper
-import ru.pavelkhromov.githubapp.domain.UserEntity
-import ru.pavelkhromov.githubapp.domain.UsersRepo
+import ru.pavelkhromov.githubapp.domain.entities.UserEntity
+import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 
 private const val DATA_LOADING_FAKE_DELAY = 1_000L
 

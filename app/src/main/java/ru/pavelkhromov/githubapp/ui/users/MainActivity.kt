@@ -7,8 +7,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.pavelkhromov.githubapp.app
 import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
-import ru.pavelkhromov.githubapp.domain.UserEntity
-import ru.pavelkhromov.githubapp.domain.UsersRepo
+import ru.pavelkhromov.githubapp.domain.entities.UserEntity
+import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
