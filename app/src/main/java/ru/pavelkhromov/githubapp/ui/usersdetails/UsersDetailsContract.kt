@@ -1,17 +1,14 @@
 package ru.pavelkhromov.githubapp.ui.usersdetails
 
+import androidx.lifecycle.LiveData
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 
 interface UsersDetailsContract {
 
-    interface View {
-        fun showUser(user: UserEntity)
-        fun showError(throwable: Throwable)
-    }
+    interface ViewModel {
+        val userLiveData: LiveData<UserEntity>
+        val errorLiveData: LiveData<Throwable>
 
-    interface Presenter {
-        fun attach(view: View)
-        fun detach()
         fun loadUser(user: UserEntity)
     }
 }
