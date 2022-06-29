@@ -25,7 +25,6 @@ class UsersDetailsActivity : AppCompatActivity() {
 
         initViewModel()
         initView(user)
-
     }
 
     private fun initViewModel() {

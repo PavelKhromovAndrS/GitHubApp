@@ -4,13 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
+import ru.pavelkhromov.githubapp.utils.SingleEventLiveData
 
 class UsersDetailsViewModel(
     private val usersRepo: UsersRepo
 ) : UsersDetailsContract.ViewModel {
 
     override val userLiveData: LiveData<UserEntity> = MutableLiveData()
-    override val errorLiveData: LiveData<Throwable> = MutableLiveData()
+    override val errorLiveData: SingleEventLiveData<Throwable> = SingleEventLiveData()
 
     override fun loadUser(user: UserEntity) {
 

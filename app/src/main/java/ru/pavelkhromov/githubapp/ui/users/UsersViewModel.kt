@@ -4,13 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
+import ru.pavelkhromov.githubapp.utils.SingleEventLiveData
 
 class UsersViewModel(
     private val usersRepo: UsersRepo
 ) : UsersContract.ViewModel {
 
     override val usersLiveData: LiveData<List<UserEntity>> = MutableLiveData()
-    override val errorLiveData: LiveData<Throwable> = MutableLiveData()
+    override val errorLiveData: LiveData<Throwable> = SingleEventLiveData()
     override val progressLiveData: LiveData<Boolean> = MutableLiveData()
 
     override fun onRefresh() {
