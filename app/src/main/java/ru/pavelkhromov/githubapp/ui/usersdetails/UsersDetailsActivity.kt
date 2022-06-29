@@ -1,68 +1,62 @@
 package ru.pavelkhromov.githubapp.ui.usersdetails
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.view.isVisible
 import coil.load
-import ru.pavelkhromov.githubapp.R
 import ru.pavelkhromov.githubapp.app
-import ru.pavelkhromov.githubapp.data.FakeUsersRepoImpl
-import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
 import ru.pavelkhromov.githubapp.databinding.ActivityUsersDetailsBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
-import ru.pavelkhromov.githubapp.ui.users.UsersContract
-import ru.pavelkhromov.githubapp.ui.users.UsersPresenter
 
-class UsersDetailsActivity : AppCompatActivity(), UsersDetailsContract.View {
+class UsersDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUsersDetailsBinding
-    private lateinit var presenter: UsersDetailsContract.Presenter
+    private lateinit var viewModel: UsersDetailsContract.ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityUsersDetailsBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        presenter = extractPresenter()
+        viewModel = extractViewModel()
 
         val user = intent.getParcelableExtra<UserEntity>("key")
 
-        presenter.attach(this)
-
+        initViewModel()
         initView(user)
     }
 
-    override fun onDestroy() {
-        presenter.detach()
-        super.onDestroy()
+    private fun initViewModel() {
+
+        viewModel = extractViewModel()
+
+        viewModel.userLiveData.observe(this) { showUser(it) }
+        viewModel.errorLiveData.observe(this) { showError(it) }
     }
 
-    override fun showUser(user: UserEntity) {
+    private fun showUser(user: UserEntity) {
         binding.userDetailsImageView.load(user.avatarUrl)
         binding.userNameTextView.text = user.login
         binding.userUidTextView.text = user.id.toString()
 
     }
 
-    override fun showError(throwable: Throwable) {
+    private fun showError(throwable: Throwable) {
         Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onRetainCustomNonConfigurationInstance(): UsersDetailsContract.Presenter {
-        return presenter
-    }
+    override fun onRetainCustomNonConfigurationInstance(): UsersDetailsContract.ViewModel =
+        viewModel
 
     private fun initView(user: UserEntity?) {
-
         user?.let {
-            presenter.loadUser(it)
+            viewModel.loadUser(it)
         }
     }
 
-    private fun extractPresenter(): UsersDetailsContract.Presenter {
-        return lastCustomNonConfigurationInstance as? UsersDetailsContract.Presenter
-            ?: UsersDetailsPresenter()
+    private fun extractViewModel(): UsersDetailsContract.ViewModel {
+        return lastCustomNonConfigurationInstance as? UsersDetailsContract.ViewModel
+            ?: UsersDetailsViewModel(app.usersRepo)
     }
 }
