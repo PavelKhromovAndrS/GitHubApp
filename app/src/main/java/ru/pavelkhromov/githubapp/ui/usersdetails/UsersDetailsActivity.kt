@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.core.view.isVisible
 import coil.load
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import ru.pavelkhromov.githubapp.app
 import ru.pavelkhromov.githubapp.databinding.ActivityUsersDetailsBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
@@ -13,6 +14,7 @@ class UsersDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUsersDetailsBinding
     private lateinit var viewModel: UsersDetailsContract.ViewModel
+    private val viewModelDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityUsersDetailsBinding.inflate(layoutInflater)
@@ -23,17 +25,16 @@ class UsersDetailsActivity : AppCompatActivity() {
 
         val user = intent.getParcelableExtra<UserEntity>("key")
 
-        initViewModel()
+        viewModel = extractViewModel()
+
+        viewModelDisposable.addAll(
+            viewModel.userLiveData.subscribe { showUser(it) },
+            viewModel.errorLiveData.subscribe { showError(it) }
+        )
+
         initView(user)
     }
 
-    private fun initViewModel() {
-
-        viewModel = extractViewModel()
-
-        viewModel.userLiveData.observe(this) { showUser(it) }
-        viewModel.errorLiveData.observe(this) { showError(it) }
-    }
 
     private fun showUser(user: UserEntity) {
         binding.userDetailsImageView.load(user.avatarUrl)

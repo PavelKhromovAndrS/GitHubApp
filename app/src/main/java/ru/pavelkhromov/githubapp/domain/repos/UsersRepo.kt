@@ -1,5 +1,7 @@
 package ru.pavelkhromov.githubapp.domain.repos
 
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 
 interface UsersRepo {
@@ -8,5 +10,7 @@ interface UsersRepo {
         onSuccess: (List<UserEntity>) -> Unit,
         onError: ((Throwable) -> Unit)? = null
     )
+
+    fun getUsers(): Single<List<UserEntity>>
 
 }
