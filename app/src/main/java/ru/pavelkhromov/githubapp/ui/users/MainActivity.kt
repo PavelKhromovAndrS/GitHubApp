@@ -6,16 +6,23 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import ru.pavelkhromov.githubapp.App
 import ru.pavelkhromov.githubapp.app
+import ru.pavelkhromov.githubapp.data.room.Converters
+import ru.pavelkhromov.githubapp.data.room.GitHubDatabase
+import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
 import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.ui.usersdetails.UsersDetailsActivity
-
 class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private val adapter: UsersAdapter = UsersAdapter(this)
     private lateinit var viewModel: UsersContract.ViewModel
+    private val viewModelDisposable = CompositeDisposable()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -24,16 +31,18 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
 
         initViews()
 
-        initViewModel()
-    }
-
-    private fun initViewModel() {
-
         viewModel = extractViewModel()
 
-        viewModel.progressLiveData.observe(this) { showProgress(it) }
-        viewModel.usersLiveData.observe(this) { showUsers(it) }
-        viewModel.errorLiveData.observe(this) { showError(it) }
+        viewModelDisposable.addAll(
+            viewModel.progressLiveData.subscribe { showProgress(it) },
+            viewModel.usersLiveData.subscribe { showUsers(it) },
+            viewModel.errorLiveData.subscribe { showError(it) }
+        )
+    }
+
+    override fun onDestroy() {
+        viewModelDisposable.dispose()
+        super.onDestroy()
     }
 
     override fun onRetainCustomNonConfigurationInstance(): UsersContract.ViewModel {
@@ -42,7 +51,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     private fun extractViewModel(): UsersContract.ViewModel {
         return lastCustomNonConfigurationInstance as? UsersContract.ViewModel
-            ?: UsersViewModel(app.usersRepo)
+            ?: UsersViewModel(app.usersRepo,app.repository)
     }
 
     private fun initViews() {
