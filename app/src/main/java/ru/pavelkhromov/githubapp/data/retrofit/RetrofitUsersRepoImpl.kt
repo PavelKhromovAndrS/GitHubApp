@@ -1,5 +1,6 @@
 package ru.pavelkhromov.githubapp.data.retrofit
 
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import retrofit2.Call
@@ -33,4 +34,6 @@ class RetrofitUsersRepoImpl : UsersRepo {
     }
 
     override fun getUsers(): Single<List<UserEntity>> = api.getUsers()
+    override fun saveUsers(users: List<UserEntity>): Completable = Completable.complete()
+
 }

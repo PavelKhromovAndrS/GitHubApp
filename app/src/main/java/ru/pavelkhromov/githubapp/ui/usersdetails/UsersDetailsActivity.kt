@@ -58,6 +58,6 @@ class UsersDetailsActivity : AppCompatActivity() {
 
     private fun extractViewModel(): UsersDetailsContract.ViewModel {
         return lastCustomNonConfigurationInstance as? UsersDetailsContract.ViewModel
-            ?: UsersDetailsViewModel(app.usersRepo)
+            ?: UsersDetailsViewModel(app.usersRepo, app.repository)
     }
 }

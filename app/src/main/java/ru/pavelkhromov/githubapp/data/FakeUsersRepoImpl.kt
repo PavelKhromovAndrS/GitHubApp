@@ -2,6 +2,7 @@ package ru.pavelkhromov.githubapp.data
 
 import android.os.Handler
 import android.os.Looper
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
@@ -23,4 +24,5 @@ class FakeUsersRepoImpl : UsersRepo {
     }
 
     override fun getUsers(): Single<List<UserEntity>> = Single.just(data)
+    override fun saveUsers(users: List<UserEntity>): Completable = Completable.complete()
 }

@@ -5,15 +5,19 @@ import androidx.lifecycle.MutableLiveData
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.kotlin.subscribeBy
+import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.Subject
+import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 import ru.pavelkhromov.githubapp.utils.SingleEventLiveData
 
 class UsersViewModel(
-    private val usersRepo: UsersRepo
+    private val usersRepo: UsersRepo,
+    private val roomUsersRepoImpl: RoomUsersRepoImpl
 ) : UsersContract.ViewModel {
 
     override val usersLiveData: Observable<List<UserEntity>> = BehaviorSubject.create()
@@ -23,7 +27,21 @@ class UsersViewModel(
     override fun onRefresh() {
         loadData()
     }
+private fun saveDataInMemory(users:List<UserEntity>){
+    roomUsersRepoImpl.saveUsers(users)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe()
+}
 
+    private fun loadDataInMemory(){
+        roomUsersRepoImpl.getUsers()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy {
+                usersLiveData.mutable().onNext(it)
+            }
+    }
     private fun loadData() {
         progressLiveData.mutable().onNext(true)
         usersRepo.getUsers()
@@ -33,12 +51,16 @@ class UsersViewModel(
             onSuccess = {
                 progressLiveData.mutable().onNext(false)
                 usersLiveData.mutable().onNext(it)
+                saveDataInMemory(it)
+
             },
             onError = {
                 progressLiveData.mutable().onNext(false)
                 errorLiveData.mutable().onNext(it)
+                loadDataInMemory()
             }
         )
+
     }
 
     private fun <T> Observable<T>.mutable(): Subject<T> {
