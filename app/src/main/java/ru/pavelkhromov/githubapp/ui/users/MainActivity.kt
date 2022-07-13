@@ -1,21 +1,17 @@
 package ru.pavelkhromov.githubapp.ui.users
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import ru.pavelkhromov.githubapp.App
 import ru.pavelkhromov.githubapp.app
-import ru.pavelkhromov.githubapp.data.room.Converters
-import ru.pavelkhromov.githubapp.data.room.GitHubDatabase
-import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
 import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.ui.usersdetails.UsersDetailsActivity
+
 class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     private lateinit var binding: ActivityMainBinding
@@ -51,16 +47,16 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     private fun extractViewModel(): UsersContract.ViewModel {
         return lastCustomNonConfigurationInstance as? UsersContract.ViewModel
-            ?: UsersViewModel(app.usersRepo,app.repository)
+            ?: UsersViewModel(app.usersRepo, app.repository)
     }
 
     private fun initViews() {
         showProgress(false)
-
-        binding.refreshButton.setOnClickListener {
-            viewModel.onRefresh()
+        binding.refreshButton.onClickObserver.subscribe {
+            if (it) {
+                viewModel.onRefresh()
+            }
         }
-
         initRecyclerView()
     }
 
