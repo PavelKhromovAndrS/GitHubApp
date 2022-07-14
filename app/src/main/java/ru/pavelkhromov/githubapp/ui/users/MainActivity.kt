@@ -7,21 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import org.koin.android.ext.android.inject
-import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
-import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 import ru.pavelkhromov.githubapp.ui.usersdetails.UsersDetailsActivity
 
 class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private val adapter: UsersAdapter = UsersAdapter(this)
-    private lateinit var viewModel: UsersContract.ViewModel
+
+    private val viewModel: UsersViewModel by viewModel()
     private val viewModelDisposable = CompositeDisposable()
-    private val usersRepo: UsersRepo by inject()
-    private val roomRepo: RoomUsersRepoImpl by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -29,8 +26,6 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         setContentView(binding.root)
 
         initViews()
-
-        viewModel = extractViewModel()
 
         viewModelDisposable.addAll(
             viewModel.progressLiveData.subscribe { showProgress(it) },
@@ -44,14 +39,6 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         super.onDestroy()
     }
 
-    override fun onRetainCustomNonConfigurationInstance(): UsersContract.ViewModel {
-        return viewModel
-    }
-
-    private fun extractViewModel(): UsersContract.ViewModel {
-        return lastCustomNonConfigurationInstance as? UsersContract.ViewModel
-            ?: UsersViewModel(usersRepo, roomRepo)
-    }
 
     private fun initViews() {
         showProgress(false)

@@ -1,5 +1,6 @@
 package ru.pavelkhromov.githubapp.ui.usersdetails
 
+import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.subscribeBy
@@ -13,7 +14,7 @@ import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 class UsersDetailsViewModel(
     private val usersRepo: UsersRepo,
     private val roomUsersRepoImpl: RoomUsersRepoImpl
-) : UsersDetailsContract.ViewModel {
+) : UsersDetailsContract.ViewModel, ViewModel() {
 
     override val userLiveData: Observable<UserEntity> = BehaviorSubject.create()
     override val errorLiveData: Observable<Throwable> = BehaviorSubject.create()
