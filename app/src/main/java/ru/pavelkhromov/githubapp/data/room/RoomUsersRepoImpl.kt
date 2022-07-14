@@ -2,8 +2,6 @@ package ru.pavelkhromov.githubapp.data.room
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
-import ru.pavelkhromov.githubapp.App
-import ru.pavelkhromov.githubapp.domain.entities.RoomUserEntity
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 
