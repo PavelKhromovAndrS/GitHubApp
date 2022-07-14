@@ -1,11 +1,7 @@
 package ru.pavelkhromov.githubapp.ui.users
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Observer
-import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
@@ -13,7 +9,6 @@ import io.reactivex.rxjava3.subjects.Subject
 import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
-import ru.pavelkhromov.githubapp.utils.SingleEventLiveData
 
 class UsersViewModel(
     private val usersRepo: UsersRepo,

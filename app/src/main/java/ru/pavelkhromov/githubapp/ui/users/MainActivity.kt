@@ -8,8 +8,10 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import ru.pavelkhromov.githubapp.app
+import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
 import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
+import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 import ru.pavelkhromov.githubapp.ui.usersdetails.UsersDetailsActivity
 
 class MainActivity : AppCompatActivity(), OnItemClickListener {
@@ -18,7 +20,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
     private val adapter: UsersAdapter = UsersAdapter(this)
     private lateinit var viewModel: UsersContract.ViewModel
     private val viewModelDisposable = CompositeDisposable()
-
+    private val usersRepo: UsersRepo by lazy { app.usersRepo }
+    private val roomRepo: RoomUsersRepoImpl by lazy { app.roomRepo }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -47,7 +50,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     private fun extractViewModel(): UsersContract.ViewModel {
         return lastCustomNonConfigurationInstance as? UsersContract.ViewModel
-            ?: UsersViewModel(app.usersRepo, app.repository)
+            ?: UsersViewModel(usersRepo, roomRepo)
     }
 
     private fun initViews() {

@@ -1,20 +1,23 @@
 package ru.pavelkhromov.githubapp.ui.usersdetails
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.core.view.isVisible
+import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import ru.pavelkhromov.githubapp.app
+import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
 import ru.pavelkhromov.githubapp.databinding.ActivityUsersDetailsBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
+import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 
 class UsersDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUsersDetailsBinding
     private lateinit var viewModel: UsersDetailsContract.ViewModel
     private val viewModelDisposable = CompositeDisposable()
+    private val usersRepo: UsersRepo by lazy { app.usersRepo }
+    private val roomRepo: RoomUsersRepoImpl by lazy { app.roomRepo }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityUsersDetailsBinding.inflate(layoutInflater)
@@ -58,6 +61,6 @@ class UsersDetailsActivity : AppCompatActivity() {
 
     private fun extractViewModel(): UsersDetailsContract.ViewModel {
         return lastCustomNonConfigurationInstance as? UsersDetailsContract.ViewModel
-            ?: UsersDetailsViewModel(app.usersRepo, app.repository)
+            ?: UsersDetailsViewModel(usersRepo, roomRepo)
     }
 }
