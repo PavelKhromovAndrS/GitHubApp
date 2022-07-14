@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import ru.pavelkhromov.githubapp.app
+import org.koin.android.ext.android.inject
 import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
 import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
@@ -20,8 +20,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
     private val adapter: UsersAdapter = UsersAdapter(this)
     private lateinit var viewModel: UsersContract.ViewModel
     private val viewModelDisposable = CompositeDisposable()
-    private val usersRepo: UsersRepo by lazy { app.usersRepo }
-    private val roomRepo: RoomUsersRepoImpl by lazy { app.roomRepo }
+    private val usersRepo: UsersRepo by inject()
+    private val roomRepo: RoomUsersRepoImpl by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)

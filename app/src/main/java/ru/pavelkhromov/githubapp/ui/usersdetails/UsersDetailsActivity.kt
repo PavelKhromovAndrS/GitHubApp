@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import ru.pavelkhromov.githubapp.app
+import org.koin.android.ext.android.inject
 import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
 import ru.pavelkhromov.githubapp.databinding.ActivityUsersDetailsBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
@@ -16,8 +16,8 @@ class UsersDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUsersDetailsBinding
     private lateinit var viewModel: UsersDetailsContract.ViewModel
     private val viewModelDisposable = CompositeDisposable()
-    private val usersRepo: UsersRepo by lazy { app.usersRepo }
-    private val roomRepo: RoomUsersRepoImpl by lazy { app.roomRepo }
+    private val usersRepo: UsersRepo  by inject()
+    private val roomRepo: RoomUsersRepoImpl by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityUsersDetailsBinding.inflate(layoutInflater)
