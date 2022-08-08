@@ -7,24 +7,34 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.pavelkhromov.githubapp.app
+import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
 import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
+import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 import ru.pavelkhromov.githubapp.ui.usersdetails.UsersDetailsActivity
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private val adapter: UsersAdapter = UsersAdapter(this)
 
-    private val viewModel: UsersViewModel by viewModel()
+    @Inject
+    lateinit var usersRepo: UsersRepo
+
+    @Inject
+    lateinit var roomUsersRepo: RoomUsersRepoImpl
+
+    private val viewModel: UsersViewModel by lazy { UsersViewModel(usersRepo,roomUsersRepo) }
+
     private val viewModelDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
+        app.appComponent.injectMainActivity(this)
         initViews()
 
         viewModelDisposable.addAll(

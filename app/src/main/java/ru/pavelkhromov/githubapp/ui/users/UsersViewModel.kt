@@ -14,7 +14,7 @@ import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 class UsersViewModel(
     private val usersRepo: UsersRepo,
     private val roomUsersRepoImpl: RoomUsersRepoImpl
-) : UsersContract.ViewModel, ViewModel(){
+) : UsersContract.ViewModel, ViewModel() {
 
     override val usersLiveData: Observable<List<UserEntity>> = BehaviorSubject.create()
     override val errorLiveData: Observable<Throwable> = BehaviorSubject.create()
@@ -23,14 +23,15 @@ class UsersViewModel(
     override fun onRefresh() {
         loadData()
     }
-private fun saveDataInMemory(users:List<UserEntity>){
-    roomUsersRepoImpl.saveUsers(users)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe()
-}
 
-    private fun loadDataInMemory(){
+    private fun saveDataInMemory(users: List<UserEntity>) {
+        roomUsersRepoImpl.saveUsers(users)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
+    }
+
+    private fun loadDataInMemory() {
         roomUsersRepoImpl.getUsers()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -38,24 +39,25 @@ private fun saveDataInMemory(users:List<UserEntity>){
                 usersLiveData.mutable().onNext(it)
             }
     }
+
     private fun loadData() {
         progressLiveData.mutable().onNext(true)
         usersRepo.getUsers()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
 
-            onSuccess = {
-                progressLiveData.mutable().onNext(false)
-                usersLiveData.mutable().onNext(it)
-                saveDataInMemory(it)
+                onSuccess = {
+                    progressLiveData.mutable().onNext(false)
+                    usersLiveData.mutable().onNext(it)
+                    saveDataInMemory(it)
 
-            },
-            onError = {
-                progressLiveData.mutable().onNext(false)
-                errorLiveData.mutable().onNext(it)
-                loadDataInMemory()
-            }
-        )
+                },
+                onError = {
+                    progressLiveData.mutable().onNext(false)
+                    errorLiveData.mutable().onNext(it)
+                    loadDataInMemory()
+                }
+            )
 
     }
 
