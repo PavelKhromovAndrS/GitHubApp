@@ -5,16 +5,26 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.pavelkhromov.githubapp.app
+import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
 import ru.pavelkhromov.githubapp.databinding.ActivityUsersDetailsBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
+import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
+import javax.inject.Inject
 
 class UsersDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUsersDetailsBinding
 
     private val viewModelDisposable = CompositeDisposable()
-    private val viewModel: UsersDetailsViewModel by viewModel()
+
+    @Inject
+    lateinit var usersRepo: UsersRepo
+
+    @Inject
+    lateinit var roomUsersRepo: RoomUsersRepoImpl
+
+    private val viewModel:UsersDetailsViewModel by lazy { UsersDetailsViewModel(usersRepo,roomUsersRepo) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityUsersDetailsBinding.inflate(layoutInflater)
@@ -23,6 +33,8 @@ class UsersDetailsActivity : AppCompatActivity() {
 
 
         val user = intent.getParcelableExtra<UserEntity>("key")
+
+        app.appComponent.injectUsersDetailsActivity(this)
 
 
 
