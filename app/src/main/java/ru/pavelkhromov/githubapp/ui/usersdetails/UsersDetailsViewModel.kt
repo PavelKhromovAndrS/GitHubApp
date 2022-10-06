@@ -8,15 +8,16 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.Subject
+import ru.pavelkhromov.dil.inject
 import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 import ru.pavelkhromov.githubapp.utils.SingleEventLiveData
 
-class UsersDetailsViewModel(
-    private val usersRepo: UsersRepo,
-    private val roomUsersRepoImpl: RoomUsersRepoImpl
-) : UsersDetailsContract.ViewModel {
+class UsersDetailsViewModel : UsersDetailsContract.ViewModel {
+
+    private val usersRepo: UsersRepo by inject()
+    private val roomUsersRepoImpl: UsersRepo by inject()
 
     override val userLiveData: Observable<UserEntity> = BehaviorSubject.create()
     override val errorLiveData: Observable<Throwable> = BehaviorSubject.create()

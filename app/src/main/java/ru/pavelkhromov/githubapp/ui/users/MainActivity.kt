@@ -6,13 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import ru.pavelkhromov.githubapp.App
-import ru.pavelkhromov.githubapp.app
-import ru.pavelkhromov.githubapp.data.room.Converters
-import ru.pavelkhromov.githubapp.data.room.GitHubDatabase
-import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
 import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.ui.usersdetails.UsersDetailsActivity
@@ -51,7 +45,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     private fun extractViewModel(): UsersContract.ViewModel {
         return lastCustomNonConfigurationInstance as? UsersContract.ViewModel
-            ?: UsersViewModel(app.usersRepo,app.repository)
+            ?: UsersViewModel()
     }
 
     private fun initViews() {
