@@ -1,20 +1,17 @@
 package ru.pavelkhromov.githubapp.ui.users
 
-import androidx.lifecycle.ViewModel
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.Subject
-import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
+import ru.pavelkhromov.dil.inject
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 
-class UsersViewModel(
-    private val usersRepo: UsersRepo,
-    private val roomUsersRepoImpl: RoomUsersRepoImpl
-) : UsersContract.ViewModel, ViewModel() {
+
 
     override val usersLiveData: Observable<List<UserEntity>> = BehaviorSubject.create()
     override val errorLiveData: Observable<Throwable> = BehaviorSubject.create()

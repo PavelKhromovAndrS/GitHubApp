@@ -7,8 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import ru.pavelkhromov.githubapp.app
-import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
+
 import ru.pavelkhromov.githubapp.databinding.ActivityMainBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
@@ -48,6 +47,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         viewModelDisposable.dispose()
         super.onDestroy()
     }
+
 
 
     private fun initViews() {

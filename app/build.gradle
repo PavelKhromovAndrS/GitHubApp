@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "ru.pavelkhromov.githubapp"
-        minSdk 21
+        minSdk 23
         targetSdk 31
         versionCode 1
         versionName "1.0"
@@ -34,6 +34,7 @@ android {
 }
 
 dependencies {
+    implementation project(path: ':dil')
     def room_version = "2.4.2"
     apply plugin: 'kotlin-kapt'
     implementation "androidx.room:room-runtime:$room_version"
