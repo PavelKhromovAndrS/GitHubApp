@@ -1,9 +1,7 @@
 package ru.pavelkhromov.githubapp.domain.repos
 
 import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
-import ru.pavelkhromov.githubapp.domain.entities.RoomUserEntity
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 
 interface UsersRepo {

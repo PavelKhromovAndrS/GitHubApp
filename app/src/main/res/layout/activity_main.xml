@@ -8,7 +8,7 @@
     android:padding="@dimen/linear_layout_padding"
     tools:context=".ui.users.MainActivity">
 
-    <com.google.android.material.button.MaterialButton
+    <ru.pavelkhromov.githubapp.utils.RxButton
         android:id="@+id/refresh_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

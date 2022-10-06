@@ -1,31 +1,42 @@
 package ru.pavelkhromov.githubapp.ui.usersdetails
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.core.view.isVisible
+import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import ru.pavelkhromov.githubapp.app
+import ru.pavelkhromov.githubapp.data.room.RoomUsersRepoImpl
 import ru.pavelkhromov.githubapp.databinding.ActivityUsersDetailsBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
+import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
+import javax.inject.Inject
 
 class UsersDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUsersDetailsBinding
-    private lateinit var viewModel: UsersDetailsContract.ViewModel
+
     private val viewModelDisposable = CompositeDisposable()
+
+    @Inject
+    lateinit var usersRepo: UsersRepo
+
+    @Inject
+    lateinit var roomUsersRepo: RoomUsersRepoImpl
+
+    private val viewModel:UsersDetailsViewModel by lazy { UsersDetailsViewModel(usersRepo,roomUsersRepo) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityUsersDetailsBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        viewModel = extractViewModel()
 
         val user = intent.getParcelableExtra<UserEntity>("key")
 
-        viewModel = extractViewModel()
+        app.appComponent.injectUsersDetailsActivity(this)
+
+
 
         viewModelDisposable.addAll(
             viewModel.userLiveData.subscribe { showUser(it) },
@@ -47,17 +58,10 @@ class UsersDetailsActivity : AppCompatActivity() {
         Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onRetainCustomNonConfigurationInstance(): UsersDetailsContract.ViewModel =
-        viewModel
-
     private fun initView(user: UserEntity?) {
         user?.let {
             viewModel.loadUser(it)
         }
     }
 
-    private fun extractViewModel(): UsersDetailsContract.ViewModel {
-        return lastCustomNonConfigurationInstance as? UsersDetailsContract.ViewModel
-            ?: UsersDetailsViewModel()
-    }
 }
