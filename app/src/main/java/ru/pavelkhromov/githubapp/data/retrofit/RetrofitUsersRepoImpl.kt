@@ -13,14 +13,14 @@ import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 import ru.pavelkhromov.githubapp.domain.repos.UsersRepo
 import java.lang.IllegalStateException
 
-class RetrofitUsersRepoImpl : UsersRepo {
+class RetrofitUsersRepoImpl(
+    private val api: GithubApi
+) : UsersRepo {
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://api.github.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .build()
-
-    private val api: GithubApi = retrofit.create(GithubApi::class.java)
 
     override fun getUsers(onSuccess: (List<UserEntity>) -> Unit, onError: ((Throwable) -> Unit)?) {
         api.getUsers().subscribeBy(

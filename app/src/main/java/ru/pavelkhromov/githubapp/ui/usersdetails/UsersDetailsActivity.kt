@@ -1,12 +1,10 @@
 package ru.pavelkhromov.githubapp.ui.usersdetails
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.core.view.isVisible
+import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import ru.pavelkhromov.githubapp.app
 import ru.pavelkhromov.githubapp.databinding.ActivityUsersDetailsBinding
 import ru.pavelkhromov.githubapp.domain.entities.UserEntity
 
@@ -58,6 +56,6 @@ class UsersDetailsActivity : AppCompatActivity() {
 
     private fun extractViewModel(): UsersDetailsContract.ViewModel {
         return lastCustomNonConfigurationInstance as? UsersDetailsContract.ViewModel
-            ?: UsersDetailsViewModel(app.usersRepo, app.repository)
+            ?: UsersDetailsViewModel()
     }
 }
